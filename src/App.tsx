@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Counter from "./components/Counter";
+import Input from "./components/Input";
+import List from "./components/List";
+import VirtualizedList from "./components/VirtualizedList";
 
 function App() {
+  const [text, setText] = useState("");
+  const [number, setNumber] = useState(0);
+
+  const rows = new Array(80000)
+    .fill(true)
+    .map(() => 25 + Math.round(Math.random() * 100));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Counter number={number} setNumber={setNumber} />
+      <Input text={text} setText={setText} />
+      <h3>Lists</h3>
+      <div style={{ display: "flex" }}>
+        <VirtualizedList rows={rows} />
+        {/* <List rows={rows} /> */}
+      </div>
     </div>
   );
 }
