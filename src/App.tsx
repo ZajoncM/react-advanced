@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { createContext, useContext } from "react";
+
+function createCtx<A extends {} | null>() {
+  const ctx = createContext<A | undefined>(undefined);
+  function useCtx() {
+    const c = useContext(ctx);
+    if (c === undefined)
+      throw new Error("useCtx must be inside a Provider with a value");
+    return c;
+  }
+  return [useCtx, ctx.Provider] as const;
+}
+
+export const [useCtx, CtxProvider] = createCtx<string>();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CtxProvider value="test">
+      <div className="App">
+        <ChildComponent />
+      </div>
+    </CtxProvider>
   );
 }
+
+const ChildComponent = () => {
+  const text = useCtx();
+
+  return <p>{text}</p>;
+};
 
 export default App;
