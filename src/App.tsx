@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import CustomErrorBoundary from "./components/ErrorBoundary";
+import Counter from "./components/Counter";
+import { ErrorBoundary } from "react-error-boundary";
+
+function ErrorFallback() {
+  return (
+    <div role="alert">
+      <h1>Something went wrong:</h1>
+    </div>
+  );
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <CustomErrorBoundary>
+        <Counter />
+      </CustomErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Counter />
+      </ErrorBoundary>
     </div>
   );
 }
