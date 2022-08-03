@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
+import * as Sentry from "@sentry/browser";
 
 interface Props {
   children?: ReactNode;
@@ -19,7 +20,10 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // console.error("test error:", error, errorInfo);
+    Sentry.withScope(() => {
+      console.log("send");
+      Sentry.captureException(error);
+    });
   }
 
   public render() {
