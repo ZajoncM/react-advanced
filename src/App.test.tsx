@@ -1,9 +1,16 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+import userEvent from "@testing-library/user-event";
+
+describe("App", () => {
+  it("should work as expected", () => {
+    render(<App />);
+
+    const button = screen.getByRole("button");
+
+    userEvent.click(button);
+
+    expect(button.innerHTML).toContainEqual("1");
+  });
 });

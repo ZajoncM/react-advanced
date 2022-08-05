@@ -1,8 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import User from "./User";
 
 function App() {
+  const [number, setNumber] = useState(0);
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +20,10 @@ function App() {
         >
           Learn React
         </a>
+        <button id="test" onClick={() => setNumber(number + 1)}>
+          {number}
+        </button>
+        <User id={1} name="user" />
       </header>
     </div>
   );
