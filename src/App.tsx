@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import openSocket from "socket.io-client";
+import { useEffect, useState } from "react";
+const socket = openSocket("http://localhost:8000");
+
+function subscribeToTimer(cb: (value: string) => void) {
+  socket.on("timer", (timestamp) => cb(timestamp));
+  socket.emit("subscribeToTimer", 100);
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [time, setTime] = useState<string>("");
+
+  useEffect(() => {
+    subscribeToTimer((timestamp: string) => {
+      setTime(timestamp);
+    });
+  }, []);
+
+  return <div className="App">{time}</div>;
 }
 
 export default App;
