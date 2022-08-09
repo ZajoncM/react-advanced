@@ -1,70 +1,27 @@
-import { useQuery, gql, useMutation } from "@apollo/client";
 import { useRef } from "react";
-
-type User = {
-  id: number;
-  name: string;
-  lastName: string;
-};
-
-type GetUserType = {
-  allUsers: User[];
-};
-
-const USER_FIELDS = gql`
-  fragment UserFields on User {
-    id
-    firstName
-    lastName
-  }
-`;
-
-const GET_USERS = gql`
-  query getUsers($name: Boolean!, $lastName: Boolean!) {
-    allUsers {
-      id
-      name: firstName @include(if: $name)
-      lastName @skip(if: $lastName)
-    }
-  }
-`;
-
-const ADD_USER = gql`
-  ${USER_FIELDS}
-  mutation addUser($name: String!, $lastName: String!) {
-    createUser(firstName: $name, lastName: $lastName) {
-      ...UserFields
-    }
-  }
-`;
-
-const REMOVE_USER = gql`
-  ${USER_FIELDS}
-  mutation addUser($id: ID!) {
-    removeUser(id: $id) {
-      ...UserFields
-    }
-  }
-`;
+import {
+  useAddUserMutation,
+  useGetUsersQuery,
+  useRemoveUserMutation,
+} from "./generated/graphql";
 
 const Users = () => {
-  const { loading, data } = useQuery<GetUserType>(GET_USERS, {
+  const { loading, data } = useGetUsersQuery({
     variables: { name: true, lastName: false },
-    fetchPolicy: "network-only",
   });
 
   const nameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
-  const [createUser] = useMutation(ADD_USER, {
+  const [createUser] = useAddUserMutation({
     refetchQueries: ["getUsers"],
   });
-  const [removeUser] = useMutation(REMOVE_USER, {
+  const [removeUser] = useRemoveUserMutation({
     refetchQueries: ["getUsers"],
   });
   const addUser = () => {
     const name = nameRef.current?.value;
-
     const lastName = lastNameRef.current?.value;
+    if (!name || !lastName) return;
 
     createUser({ variables: { name, lastName } });
   };
@@ -74,9 +31,12 @@ const Users = () => {
   return (
     <div>
       <ul>
-        {data?.allUsers.map(({ id, name, lastName }) => (
-          <li key={id} onClick={() => removeUser({ variables: { id } })}>
-            {name} {lastName}
+        {data?.allUsers?.map((user) => (
+          <li
+            key={user?.id}
+            onClick={() => removeUser({ variables: { id: user?.id! } })}
+          >
+            {user?.name} {user?.lastName}
           </li>
         ))}
       </ul>

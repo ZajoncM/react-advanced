@@ -1,0 +1,25 @@
+fragment UserFields on User {
+  id
+  firstName
+  lastName
+}
+
+query getUsers($name: Boolean!, $lastName: Boolean!) {
+  allUsers {
+    id
+    name: firstName @include(if: $name)
+    lastName @skip(if: $lastName)
+  }
+}
+
+mutation addUser($name: String!, $lastName: String!) {
+  createUser(firstName: $name, lastName: $lastName) {
+    ...UserFields
+  }
+}
+
+mutation removeUser($id: ID!) {
+  removeUser(id: $id) {
+    ...UserFields
+  }
+}
