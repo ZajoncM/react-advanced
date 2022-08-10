@@ -15,231 +15,136 @@ export type Scalars = {
   Float: number;
 };
 
-export type ListMetadata = {
-  __typename?: 'ListMetadata';
-  count?: Maybe<Scalars['Int']>;
+export type CreateUserInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createManyUser?: Maybe<Array<Maybe<User>>>;
-  createUser?: Maybe<User>;
-  removeUser?: Maybe<User>;
-  updateUser?: Maybe<User>;
-};
-
-
-export type MutationCreateManyUserArgs = {
-  data?: InputMaybe<Array<InputMaybe<UserInput>>>;
+  createUser: User;
+  removeUser: User;
+  updateUser: User;
 };
 
 
 export type MutationCreateUserArgs = {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
+  createUserInput: CreateUserInput;
 };
 
 
 export type MutationRemoveUserArgs = {
-  id: Scalars['ID'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationUpdateUserArgs = {
-  firstName?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  lastName?: InputMaybe<Scalars['String']>;
+  updateUserInput: UpdateUserInput;
 };
 
 export type Query = {
   __typename?: 'Query';
-  User?: Maybe<User>;
-  _allUsersMeta?: Maybe<ListMetadata>;
-  allUsers?: Maybe<Array<Maybe<User>>>;
+  user: User;
+  users: Array<User>;
 };
 
-
-export type QueryUserArgs = {
-  id: Scalars['ID'];
+export type Subscription = {
+  __typename?: 'Subscription';
+  user: User;
 };
 
-
-export type Query_AllUsersMetaArgs = {
-  filter?: InputMaybe<UserFilter>;
-  page?: InputMaybe<Scalars['Int']>;
-  perPage?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type QueryAllUsersArgs = {
-  filter?: InputMaybe<UserFilter>;
-  page?: InputMaybe<Scalars['Int']>;
-  perPage?: InputMaybe<Scalars['Int']>;
-  sortField?: InputMaybe<Scalars['String']>;
-  sortOrder?: InputMaybe<Scalars['String']>;
+export type UpdateUserInput = {
+  /** Example field (placeholder) */
+  exampleField?: InputMaybe<Scalars['Int']>;
+  id: Scalars['Int'];
 };
 
 export type User = {
   __typename?: 'User';
-  firstName: Scalars['String'];
-  id: Scalars['ID'];
-  lastName: Scalars['String'];
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int'];
 };
 
-export type UserFilter = {
-  firstName?: InputMaybe<Scalars['String']>;
-  firstName_neq?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
-  id_neq?: InputMaybe<Scalars['ID']>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  lastName?: InputMaybe<Scalars['String']>;
-  lastName_neq?: InputMaybe<Scalars['String']>;
-  q?: InputMaybe<Scalars['String']>;
-};
+export type UserFieldsFragment = { __typename?: 'User', exampleField: number };
 
-export type UserInput = {
-  firstName: Scalars['String'];
-  id: Scalars['ID'];
-  lastName: Scalars['String'];
-};
-
-export type UserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string };
-
-export type GetUsersQueryVariables = Exact<{
-  name: Scalars['Boolean'];
-  lastName: Scalars['Boolean'];
-}>;
+export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', allUsers?: Array<{ __typename?: 'User', id: string, lastName?: string, name: string } | null> | null };
+export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', exampleField: number } };
 
-export type AddUserMutationVariables = Exact<{
-  name: Scalars['String'];
-  lastName: Scalars['String'];
-}>;
+export type SubUserSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AddUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null };
-
-export type RemoveUserMutationVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type RemoveUserMutation = { __typename?: 'Mutation', removeUser?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null };
+export type SubUserSubscription = { __typename?: 'Subscription', user: { __typename?: 'User', exampleField: number } };
 
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
-  id
-  firstName
-  lastName
+  exampleField
 }
     `;
-export const GetUsersDocument = gql`
-    query getUsers($name: Boolean!, $lastName: Boolean!) {
-  allUsers {
-    id
-    name: firstName @include(if: $name)
-    lastName @skip(if: $lastName)
+export const GetUserDocument = gql`
+    query getUser {
+  user {
+    ...UserFields
   }
 }
-    `;
+    ${UserFieldsFragmentDoc}`;
 
 /**
- * __useGetUsersQuery__
+ * __useGetUserQuery__
  *
- * To run a query within a React component, call `useGetUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUsersQuery({
+ * const { data, loading, error } = useGetUserQuery({
  *   variables: {
- *      name: // value for 'name'
- *      lastName: // value for 'lastName'
  *   },
  * });
  */
-export function useGetUsersQuery(baseOptions: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
+export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, options);
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
       }
-export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, options);
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
         }
-export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
-export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
-export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
-export const AddUserDocument = gql`
-    mutation addUser($name: String!, $lastName: String!) {
-  createUser(firstName: $name, lastName: $lastName) {
-    ...UserFields
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const SubUserDocument = gql`
+    subscription subUser {
+  user {
+    exampleField
   }
 }
-    ${UserFieldsFragmentDoc}`;
-export type AddUserMutationFn = Apollo.MutationFunction<AddUserMutation, AddUserMutationVariables>;
+    `;
 
 /**
- * __useAddUserMutation__
+ * __useSubUserSubscription__
  *
- * To run a mutation, you first call `useAddUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useSubUserSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubUserSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [addUserMutation, { data, loading, error }] = useAddUserMutation({
+ * const { data, loading, error } = useSubUserSubscription({
  *   variables: {
- *      name: // value for 'name'
- *      lastName: // value for 'lastName'
  *   },
  * });
  */
-export function useAddUserMutation(baseOptions?: Apollo.MutationHookOptions<AddUserMutation, AddUserMutationVariables>) {
+export function useSubUserSubscription(baseOptions?: Apollo.SubscriptionHookOptions<SubUserSubscription, SubUserSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddUserMutation, AddUserMutationVariables>(AddUserDocument, options);
+        return Apollo.useSubscription<SubUserSubscription, SubUserSubscriptionVariables>(SubUserDocument, options);
       }
-export type AddUserMutationHookResult = ReturnType<typeof useAddUserMutation>;
-export type AddUserMutationResult = Apollo.MutationResult<AddUserMutation>;
-export type AddUserMutationOptions = Apollo.BaseMutationOptions<AddUserMutation, AddUserMutationVariables>;
-export const RemoveUserDocument = gql`
-    mutation removeUser($id: ID!) {
-  removeUser(id: $id) {
-    ...UserFields
-  }
-}
-    ${UserFieldsFragmentDoc}`;
-export type RemoveUserMutationFn = Apollo.MutationFunction<RemoveUserMutation, RemoveUserMutationVariables>;
-
-/**
- * __useRemoveUserMutation__
- *
- * To run a mutation, you first call `useRemoveUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeUserMutation, { data, loading, error }] = useRemoveUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useRemoveUserMutation(baseOptions?: Apollo.MutationHookOptions<RemoveUserMutation, RemoveUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RemoveUserMutation, RemoveUserMutationVariables>(RemoveUserDocument, options);
-      }
-export type RemoveUserMutationHookResult = ReturnType<typeof useRemoveUserMutation>;
-export type RemoveUserMutationResult = Apollo.MutationResult<RemoveUserMutation>;
-export type RemoveUserMutationOptions = Apollo.BaseMutationOptions<RemoveUserMutation, RemoveUserMutationVariables>;
+export type SubUserSubscriptionHookResult = ReturnType<typeof useSubUserSubscription>;
+export type SubUserSubscriptionResult = Apollo.SubscriptionResult<SubUserSubscription>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
