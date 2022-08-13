@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import Counter from "./Counter";
 
 describe("Counter", () => {
-  it.only("should be implemented", () => {
+  it("should be implemented", () => {
     render(<Counter />);
 
     const container = screen.getByText(/example counter/);

@@ -1,5 +1,9 @@
 const Counter = () => {
-  return <div>implement me</div>;
+  return (
+    <div>
+      <h1>example counter</h1>
+    </div>
+  );
 };
 
 export default Counter;
